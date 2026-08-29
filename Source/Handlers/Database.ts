@@ -16,16 +16,16 @@ function getMapFriendlyName(sceneId: string): string {
 
 // ─── تحويل DisabledEmotes لنص مقروء ──────────────────────────────────────────
 function getEmoteRestrictionText(disabledEmotes: number[]): string {
-  if (!disabledEmotes || disabledEmotes.length === 0) return "All Allowed ✅";
+  if (!disabledEmotes || disabledEmotes.length === 0) return "All Allowed <:Tick:1527264315948667002>";
 
   // الـ presets الخاصة
   const presetMap: Record<number, string> = {
-    [-2]: "Punch Only<:FirePunch:1505129652912394361> <:Punch:1505129711624388658>",
-    [-3]: "Punch & Kick Only <:FirePunch:1505129652912394361> <:Punch:1505129711624388658> <:WaterKick:1505128949687259156><:Kick:1505128903415693312>",
-    [-4]: "Banana Only<:GoldenBanana:1505128998890508288><:Banana:1505129047858876527>",
-    [-5]: "Hug Only<:ElectricHug:1505129428487901294><:Hug:1505129341389115495>",
-    [-1]: "Special Emotes Only<:dice:1505129485165527142>",
-    [0]:  "No Emotes<:X_:1505130423460696165>",
+    [-2]: "Punch Only<:FirePunch:1526711682624393246> <:Punch:1526710124448841820>",
+    [-3]: "Punch & Kick Only <:FirePunch:1526711682624393246> <:Punch:1526710124448841820> <:WaterKick:1526710886058819777> <:Kick:1526710865502408844>",
+    [-4]: "Banana Only <:GoldenBanana:1526711861414985851> <:Banana:1526711841785643231>",
+    [-5]: "Hug Only <:ElectricHug:1526711094888890458> <:Hug:1526711037057826838>",
+    [-1]: "Special Emotes Only <:DadoSg:1531314826763305082>",
+    [0]:  "No Emotes <:Cross:1526712034459390154>",
   };
 
   // تحقق إذا كل الـ emotes هي preset واحد
@@ -81,7 +81,7 @@ function buildWebhookPayload(opts: {
     : "";
 
   return {
-    content: "<@&1502000025218187447>",
+    content: "<@&1527263484058927124>",
     embeds: [
       {
         title: "",
@@ -164,8 +164,8 @@ async function buildEmbedContent(tournament: any) {
   if (Array.isArray(tournament.Prizes) && tournament.Prizes.length > 0) {
     prizesContent = "\n--- \n🏆 Prizes\n";
     tournament.Prizes.forEach((prize: any) => {
-      const medal = prize.position === 1 ? "🥇" : prize.position === 2 ? "🥈" : prize.position === 3 ? "🥉" : `#${prize.position}`;
-      prizesContent += `<:icons_text1:1503943667742937108> ${medal} **${Number(prize.amount).toLocaleString()} 💎**\n`;
+      const medal = prize.position === 1 ? "<:GoldenMedal:1526712399779070032>" : prize.position === 2 ? "<:SilverMedal:1526716858441531472>" : prize.position === 3 ? "<:BronzeMedal:1526716882403721430>" : `#${prize.position}`;
+      prizesContent += `<:icons_text1:1503943667742937108> ${medal} **${Number(prize.amount).toLocaleString()} <:PileOfGems:1526712977385066546>**\n`;
     });
   }
 
