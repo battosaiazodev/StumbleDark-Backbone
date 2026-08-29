@@ -20,7 +20,7 @@ function getEmoteRestrictionText(disabledEmotes: number[]): string {
 
   // الـ presets الخاصة
   const presetMap: Record<number, string> = {
-    [-2]: "Punch Only<:FirePunch:1526711682624393246> <:Punch:1526710124448841820>",
+    [-2]: "Punch Only <:FirePunch:1526711682624393246> <:Punch:1526710124448841820>",
     [-3]: "Punch & Kick Only <:FirePunch:1526711682624393246> <:Punch:1526710124448841820> <:WaterKick:1526710886058819777> <:Kick:1526710865502408844>",
     [-4]: "Banana Only <:GoldenBanana:1526711861414985851> <:Banana:1526711841785643231>",
     [-5]: "Hug Only <:ElectricHug:1526711094888890458> <:Hug:1526711037057826838>",
