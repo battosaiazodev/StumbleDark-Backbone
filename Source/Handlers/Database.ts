@@ -162,7 +162,7 @@ async function buildEmbedContent(tournament: any) {
 
   let prizesContent = "";
   if (Array.isArray(tournament.Prizes) && tournament.Prizes.length > 0) {
-    prizesContent = "\n--- \n🏆 Prizes\n";
+    prizesContent = "\n--- \n<:Trophy:1526712479789617313> Prizes\n";
     tournament.Prizes.forEach((prize: any) => {
       const medal = prize.position === 1 ? "<:GoldenMedal:1526712399779070032>" : prize.position === 2 ? "<:SilverMedal:1526716858441531472>" : prize.position === 3 ? "<:BronzeMedal:1526716882403721430>" : `#${prize.position}`;
       prizesContent += `<:icons_text1:1503943667742937108> ${medal} **${Number(prize.amount).toLocaleString()} <:PileOfGems:1526712977385066546>**\n`;
