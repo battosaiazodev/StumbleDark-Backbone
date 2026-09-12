@@ -18,7 +18,6 @@ function getMapFriendlyName(sceneId: string): string {
 function getEmoteRestrictionText(disabledEmotes: number[]): string {
   if (!disabledEmotes || disabledEmotes.length === 0) return "All Allowed <:Tick:1527264315948667002>";
 
-  // الـ presets الخاصة
   const presetMap: Record<number, string> = {
     [-2]: "Punch Only <:FirePunch:1526711682624393246> <:Punch:1526710124448841820>",
     [-3]: "Punch & Kick Only <:FirePunch:1526711682624393246> <:Punch:1526710124448841820> <:WaterKick:1526710886058819777> <:Kick:1526710865502408844>",
@@ -28,19 +27,16 @@ function getEmoteRestrictionText(disabledEmotes: number[]): string {
     [0]:  "No Emotes <:Cross:1526712034459390154>",
   };
 
-  // تحقق إذا كل الـ emotes هي preset واحد
   if (disabledEmotes.length === 1 && presetMap[disabledEmotes[0]] !== undefined) {
     return presetMap[disabledEmotes[0]];
   }
 
-  // إذا في preset ضمن القائمة
   for (const [preset, label] of Object.entries(presetMap)) {
     if (disabledEmotes.includes(Number(preset))) {
       return label;
     }
   }
 
-  // أسماء الـ emotes العادية
   const names = disabledEmotes
     .slice(0, 5)
     .map((id) => {
@@ -51,6 +47,30 @@ function getEmoteRestrictionText(disabledEmotes: number[]): string {
     });
 
   return names.join(", ") + (disabledEmotes.length > 5 ? ` +${disabledEmotes.length - 5} more` : "");
+}
+
+// ─── Phase type friendly name (fixes "Unknown") ──────────────────────────────
+function getPhaseTypeName(phaseType: any): string {
+  const n = Number(phaseType);
+
+  const friendly: Record<number, string> = {
+    [TournamentPhaseType.SingleEliminationBracket]: "Bracket (Single Elimination)",
+    [TournamentPhaseType.RoundRobin]:               "Round Robin",
+    [TournamentPhaseType.Arena]:                    "Arena",
+    [TournamentPhaseType.DoubleEliminationBracket]: "Double Elimination",
+    [TournamentPhaseType.DynamicBrackets]:          "Dynamic Brackets",
+  };
+
+  if (friendly[n]) return friendly[n];
+
+  const key = Object.keys(TournamentPhaseType).find(
+    (k) => isNaN(Number(k)) && (TournamentPhaseType as any)[k] === n
+  );
+  if (key) {
+    return key.replace(/([A-Z])/g, " $1").trim();
+  }
+
+  return "Unknown";
 }
 
 // ─── بناء الـ embed payload ────────────────────────────────────────────────────
@@ -80,6 +100,9 @@ function buildWebhookPayload(opts: {
     ? `<:icons_text1:1503943667742937108> Emotes: **${emoteText}**\n`
     : "";
 
+  // ✅ Region always uppercase
+  const regionDisplay = (tournament.Region || "North America").toString().toUpperCase();
+
   return {
     content: "<@&1527263484058927124>",
     embeds: [
@@ -90,8 +113,8 @@ function buildWebhookPayload(opts: {
           url: tournament.TournamentImage || "https://cdn.stumblepriv.com/Emotes/Emote007_Crown.png",
         },
         description:
-          `# <:trophy:1503930219784835162> ${tournament.TournamentName.toLowerCase()}\n\n` +
-          `<:icons_text1:1503943667742937108> Region: **${tournament.Region || "North America"}**\n` +
+          `# <:Trophy:1548294229673910463> ${tournament.TournamentName.toLowerCase()}\n\n` +
+          `<:icons_text1:1503943667742937108> Region: **${regionDisplay}**\n` +
           `<:icons_text1:1503943667742937108> Mode: **${modeText}**\n` +
           emoteSection +
           `\n--- \n` +
@@ -114,7 +137,7 @@ function buildWebhookPayload(opts: {
 
 // ─── بناء محتوى الـ embed (مشترك بين الإرسال والتحديث) ───────────────────────
 async function buildEmbedContent(tournament: any) {
-  const hexColor    = tournament.TournamentColor?.replace("#", "") || "ff00ff";
+  const hexColor     = tournament.TournamentColor?.replace("#", "") || "ff00ff";
   const decimalColor = parseInt(hexColor.substring(0, 6), 16);
 
   const isFFA    = tournament.PartySize === 1 && tournament.MaxPlayersPerMatch > 2;
@@ -134,7 +157,6 @@ async function buildEmbedContent(tournament: any) {
   const teamCount  = Math.ceil(signedUpCount / partySize);
   const maxTeams   = Math.ceil(maxPlayers / partySize);
 
-  // ─── نص الـ emotes ────────────────────────────────────────────────────
   const disabledEmotes: number[] = Array.isArray(tournament.Properties?.DisabledEmotes)
     ? tournament.Properties.DisabledEmotes
     : [];
@@ -143,15 +165,9 @@ async function buildEmbedContent(tournament: any) {
   let phasesContent = "";
   if (tournament.Phases && tournament.Phases.length > 0) {
     tournament.Phases.forEach((phase: any, index: number) => {
-      const phaseTypeName =
-        phase.PhaseType === TournamentPhaseType.SingleEliminationBracket
-          ? "Bracket (Single Elimination)"
-          : phase.PhaseType === TournamentPhaseType.RoundRobin
-          ? "Round Robin"
-          : phase.PhaseType === TournamentPhaseType.Arena
-          ? "Arena"
-          : "Unknown";
+      const phaseTypeName = getPhaseTypeName(phase.PhaseType);
       phasesContent += `<:icons_text1:1503943667742937108> Phase ${index + 1}: **${phaseTypeName}**\n`;
+
       if (phase.Maps && phase.Maps.length > 0) {
         phase.Maps.forEach((sceneId: string, rIndex: number) => {
           phasesContent += `<:icons_text1:1503943667742937108> Round ${rIndex + 1}: **${getMapFriendlyName(sceneId)}**\n`;
@@ -162,10 +178,14 @@ async function buildEmbedContent(tournament: any) {
 
   let prizesContent = "";
   if (Array.isArray(tournament.Prizes) && tournament.Prizes.length > 0) {
-    prizesContent = "\n--- \n<:Trophy:1526712479789617313> Prizes\n";
+    prizesContent = "\n--- \n<:Trophy:1548294229673910463> Prizes\n";
     tournament.Prizes.forEach((prize: any) => {
-      const medal = prize.position === 1 ? "<:GoldenMedal:1526712399779070032>" : prize.position === 2 ? "<:SilverMedal:1526716858441531472>" : prize.position === 3 ? "<:BronzeMedal:1526716882403721430>" : `#${prize.position}`;
-      prizesContent += `<:icons_text1:1503943667742937108> ${medal} **${Number(prize.amount).toLocaleString()} <:PileOfGems:1526712977385066546>**\n`;
+      const medal =
+        prize.position === 1 ? "<:GoldenMedal:1548289642808352820>" :
+        prize.position === 2 ? "<:SilverMedal:1548289624844144733>" :
+        prize.position === 3 ? "<:BronzeMedal:1548289638568042634>" :
+        `#${prize.position}`;
+      prizesContent += `<:icons_text1:1503943667742937108> ${medal} **${Number(prize.amount).toLocaleString()} <:Gem:1548293429715411054>**\n`;
     });
   }
 
@@ -193,7 +213,6 @@ async function SendWebhook(tournament: any): Promise<string | null> {
       ? WEBHOOK_URI.replace("https://discord.com/api/webhooks/", "https://discord.com/api/v10/webhooks/")
       : WEBHOOK_URI;
 
-    // ?wait=true يخلي Discord يرجع الـ message object مع الـ ID
     const response = await fetch(`${webhookUrl}?wait=true`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -229,7 +248,6 @@ export async function UpdateWebhookSignupCount(tournamentId: string): Promise<vo
       ? WEBHOOK_URI.replace("https://discord.com/api/webhooks/", "https://discord.com/api/v10/webhooks/")
       : WEBHOOK_URI;
 
-    // PATCH لتعديل الرسالة الموجودة
     const response = await fetch(`${webhookUrl}/messages/${messageId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -255,7 +273,6 @@ export async function CreateTournament(tournamentData: TournamentInput) {
 
   const saved = await tournament.save();
 
-  // إرسال الـ webhook وحفظ الـ message ID
   SendWebhook(saved)
     .then(async (messageId) => {
       if (messageId) {
