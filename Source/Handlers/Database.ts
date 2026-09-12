@@ -118,14 +118,14 @@ function buildWebhookPayload(opts: {
           `<:icons_text1:1503943667742937108> Region: **${regionDisplay}**\n` +
           `<:icons_text1:1503943667742937108> Mode: **${modeText}**\n` +
           emoteSection +
-          `\n--- \n` +
+          `\n \n` +
           `<:dd:1503941939572248616> Signed-Ups\n` +
           `<:icons_text1:1503943667742937108> **${signedUpCount}/${maxPlayers}** — (${teamCount}/${maxTeams} Teams)\n` +
           `<:gg:1503942388899516598> Sign-ups Open\n` +
           `<:icons_text1:1503943667742937108> <t:${signupTimestamp}:R> (**<t:${signupTimestamp}:f>**)\n` +
           `<:gg:1503942388899516598> Start Time\n` +
           `<:icons_text1:1503943667742937108> <t:${startTimestamp}:R> (**<t:${startTimestamp}:f>**)\n\n` +
-          `--- \n` +
+          ` \n` +
           `<:spr_icon_button_leaderboard:1503930356783513631> Phases\n` +
           phasesContent +
           prizesContent,
@@ -179,7 +179,7 @@ async function buildEmbedContent(tournament: any) {
 
   let prizesContent = "";
   if (Array.isArray(tournament.Prizes) && tournament.Prizes.length > 0) {
-    prizesContent = "\n--- \n<:Trophy:1548294229673910463> Prizes\n";
+    prizesContent = "\n \n<:Trophy:1548294229673910463> Prizes\n";
     tournament.Prizes.forEach((prize: any) => {
       const medal =
         prize.position === 1 ? "<:GoldenMedal:1548289642808352820>" :
