@@ -100,20 +100,18 @@ function buildWebhookPayload(opts: {
     ? `<:icons_text1:1503943667742937108> Emotes: **${emoteText}**\n`
     : "";
 
-  // ✅ Region always uppercase
   const regionDisplay = (tournament.Region || "North America").toString().toUpperCase();
 
   return {
     content: "<@&1548232639327109200>",
     embeds: [
       {
-        title: "A new tournament has been created on StumbleDark! <:Warning:1548403222983737354>",
+        title: "A new Tournament has been scheduled! <:Warning:1548403222983737354>",
         color: decimalColor,
         thumbnail: {
           url: tournament.TournamentImage || "https://cdn.stumblepriv.com/Emotes/Emote007_Crown.png",
         },
         description:
-          // ✅ Tournament name now keeps original casing (no .toLowerCase())
           `# <:Trophy:1548294229673910463> ${tournament.TournamentName}\n\n` +
           `<:icons_text1:1503943667742937108> Region: **${regionDisplay}**\n` +
           `<:icons_text1:1503943667742937108> Mode: **${modeText}**\n` +
