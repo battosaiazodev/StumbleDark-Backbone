@@ -3,7 +3,11 @@ import { BackboneUser } from "../Models/BackboneUser";
 const HALL_OF_FAME_WEBHOOK = process.env.HALL_OF_FAME_WEBHOOK  || process.env.WEBHOOK_URI || "";
 const LEADERBOARD_WEBHOOK  = process.env.LEADERBOARD_WEBHOOK   || process.env.WEBHOOK_URI || "";
 
-const MEDALS = ["🥇", "🥈", "🥉"];
+const MEDALS = [
+  "<:GoldenMedal:1548289642808352820>",
+  "<:SilverMedal:1548289624844144733>",
+  "<:BronzeMedal:1548289638568042634>",
+];
 const PLACES = ["1st Place", "2nd Place", "3rd Place"];
 
 const TITLES: Record<number, string> = {
@@ -34,7 +38,7 @@ function getWebhookUrl(uri: string): string {
     : uri;
 }
 
-// ─── Hall of Fame: فائزو بطولة معينة (مركز 1، 2، 3) ─────────────────────────
+// ─── Hall of Fame ────────────────────────────────────────────────────────────
 export async function SendHallOfFame(opts: {
   tournamentId:    string;
   tournamentName:  string;
@@ -46,7 +50,6 @@ export async function SendHallOfFame(opts: {
   try {
     const { tournamentId, tournamentName, tournamentColor, tournamentImage } = opts;
 
-    // جلب اللاعبين المرتبين حسب FinalPlace في هذه البطولة
     const players = await BackboneUser.find({
       [`Tournaments.${tournamentId}.SignedUp`]: true,
       [`Tournaments.${tournamentId}.FinalPlace`]: { $gt: 0 },
@@ -68,7 +71,6 @@ export async function SendHallOfFame(opts: {
       .sort((a, b) => a.finalPlace - b.finalPlace)
       .slice(0, 3);
 
-    // fallback: Winners array
     if (sorted.length === 0) {
       const { Tournament } = await import("../Models/Tournament");
       const tour = await Tournament.findOne({ TournamentId: tournamentId }).lean();
@@ -94,9 +96,9 @@ export async function SendHallOfFame(opts: {
     const payload = {
       embeds: [
         {
-          title: "🏛️ Hall of Fame",
+          title: "<:Crown:1548294227941662852> Hall of Fame",
           description:
-            `### 🏆 ${tournamentName}\n` +
+            `### <:Trophy:1548294229673910463> ${tournamentName}\n` +
             `The tournament has ended! Here are the top players:\n\n` +
             podiumLines.join("\n\n"),
           color:     colorValue,
@@ -121,7 +123,7 @@ export async function SendHallOfFame(opts: {
   }
 }
 
-// ─── All-Time Leaderboard: أفضل 30 لاعب كل الوقت (3 embeds × 10) ─────────────
+// ─── All-Time Leaderboard ────────────────────────────────────────────────────
 export async function SendAllTimeLeaderboard(): Promise<void> {
   if (!LEADERBOARD_WEBHOOK) return;
 
@@ -136,7 +138,6 @@ export async function SendAllTimeLeaderboard(): Promise<void> {
 
     const maxWins = (top30[0] as any).TournamentsWon as number;
 
-    // نقسم الـ 30 لاعب على 3 embeds (كل embed 10 لاعبين)
     const chunks: typeof top30[] = [
       top30.slice(0, 10),
       top30.slice(10, 20),
@@ -154,12 +155,14 @@ export async function SendAllTimeLeaderboard(): Promise<void> {
         const medal = rank <= 3 ? MEDALS[rank - 1] : `**${rank}.**`;
         return (
           `${medal} **${(p as any).Username}** — *${title}*\n` +
-          `> \`${bar}\` **${wins} 🏆**`
+          `> \`${bar}\` **${wins} <:Trophy:1548294229673910463>**`
         );
       });
 
       return {
-        title:       chunkIndex === 0 ? "🌟 All-Time Leaderboard" : `🌟 Leaderboard (cont.)`,
+        title:       chunkIndex === 0 
+          ? "<:star_sg:1548398997427855370> All-Time Leaderboard" 
+          : `<:star_sg:1548398997427855370> Leaderboard (cont.)`,
         description: lines.join("\n\n"),
         color:       chunkIndex === 0 ? 0xffd700 : chunkIndex === 1 ? 0xc0c0c0 : 0xcd7f32,
         footer:      { text: `Ranks ${startRank}–${startRank + chunk.length - 1} • Updated after every tournament` },
