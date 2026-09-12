@@ -38,7 +38,6 @@ function getWebhookUrl(uri: string): string {
     : uri;
 }
 
-// ─── Hall of Fame ────────────────────────────────────────────────────────────
 export async function SendHallOfFame(opts: {
   tournamentId:    string;
   tournamentName:  string;
@@ -123,7 +122,6 @@ export async function SendHallOfFame(opts: {
   }
 }
 
-// ─── All-Time Leaderboard ────────────────────────────────────────────────────
 export async function SendAllTimeLeaderboard(): Promise<void> {
   if (!LEADERBOARD_WEBHOOK) return;
 
