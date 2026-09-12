@@ -113,7 +113,8 @@ function buildWebhookPayload(opts: {
           url: tournament.TournamentImage || "https://cdn.stumblepriv.com/Emotes/Emote007_Crown.png",
         },
         description:
-          `# <:Trophy:1548294229673910463> ${tournament.TournamentName.toLowerCase()}\n\n` +
+          // ✅ Tournament name now keeps original casing (no .toLowerCase())
+          `# <:Trophy:1548294229673910463> ${tournament.TournamentName}\n\n` +
           `<:icons_text1:1503943667742937108> Region: **${regionDisplay}**\n` +
           `<:icons_text1:1503943667742937108> Mode: **${modeText}**\n` +
           emoteSection +
