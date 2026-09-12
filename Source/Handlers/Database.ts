@@ -14,6 +14,7 @@ function getMapFriendlyName(sceneId: string): string {
   return mapName || sceneId;
 }
 
+// ─── تحويل DisabledEmotes لنص مقروء ──────────────────────────────────────────
 function getEmoteRestrictionText(disabledEmotes: number[]): string {
   if (!disabledEmotes || disabledEmotes.length === 0) return "All Allowed <:Tick:1527264315948667002>";
 
@@ -48,6 +49,7 @@ function getEmoteRestrictionText(disabledEmotes: number[]): string {
   return names.join(", ") + (disabledEmotes.length > 5 ? ` +${disabledEmotes.length - 5} more` : "");
 }
 
+// ─── Phase type friendly name (fixes "Unknown") ──────────────────────────────
 function getPhaseTypeName(phaseType: any): string {
   const n = Number(phaseType);
 
@@ -71,6 +73,7 @@ function getPhaseTypeName(phaseType: any): string {
   return "Unknown";
 }
 
+// ─── بناء الـ embed payload ────────────────────────────────────────────────────
 function buildWebhookPayload(opts: {
   tournament: any;
   decimalColor: number;
@@ -97,18 +100,20 @@ function buildWebhookPayload(opts: {
     ? `<:icons_text1:1503943667742937108> Emotes: **${emoteText}**\n`
     : "";
 
+  // ✅ Region always uppercase
   const regionDisplay = (tournament.Region || "North America").toString().toUpperCase();
 
   return {
-    content: "<@&1548232639327109200>",
+    content: "<@&1527263484058927124>",
     embeds: [
       {
-        title: "A new Tournament has been scheduled! <:Warning:1548403222983737354>",
+        title: "",
         color: decimalColor,
         thumbnail: {
           url: tournament.TournamentImage || "https://cdn.stumblepriv.com/Emotes/Emote007_Crown.png",
         },
         description:
+          // ✅ Tournament name now keeps original casing (no .toLowerCase())
           `# <:Trophy:1548294229673910463> ${tournament.TournamentName}\n\n` +
           `<:icons_text1:1503943667742937108> Region: **${regionDisplay}**\n` +
           `<:icons_text1:1503943667742937108> Mode: **${modeText}**\n` +
@@ -131,6 +136,7 @@ function buildWebhookPayload(opts: {
   };
 }
 
+// ─── بناء محتوى الـ embed (مشترك بين الإرسال والتحديث) ───────────────────────
 async function buildEmbedContent(tournament: any) {
   const hexColor     = tournament.TournamentColor?.replace("#", "") || "ff00ff";
   const decimalColor = parseInt(hexColor.substring(0, 6), 16);
@@ -197,6 +203,7 @@ async function buildEmbedContent(tournament: any) {
   };
 }
 
+// ─── إرسال webhook جديد ويرجع الـ message ID ─────────────────────────────────
 async function SendWebhook(tournament: any): Promise<string | null> {
   if (!WEBHOOK_URI) return null;
 
@@ -227,6 +234,7 @@ async function SendWebhook(tournament: any): Promise<string | null> {
   }
 }
 
+// ─── تحديث رسالة الـ webhook بعداد التسجيل الجديد ────────────────────────────
 export async function UpdateWebhookSignupCount(tournamentId: string): Promise<void> {
   if (!WEBHOOK_URI) return;
 
@@ -255,6 +263,7 @@ export async function UpdateWebhookSignupCount(tournamentId: string): Promise<vo
   }
 }
 
+// ─── إنشاء بطولة جديدة ────────────────────────────────────────────────────────
 export async function CreateTournament(tournamentData: TournamentInput) {
   const signupStart = tournamentData.SignupStart ?? new Date(tournamentData.StartTime.getTime() - 60 * 60 * 1000);
 
@@ -279,6 +288,7 @@ export async function CreateTournament(tournamentData: TournamentInput) {
   return saved;
 }
 
+// ─── توليد User ID فريد ───────────────────────────────────────────────────────
 async function GenerateUserId(): Promise<string> {
   const UsersCollection = BackboneUser.collection;
   let unique = false;
@@ -292,6 +302,7 @@ async function GenerateUserId(): Promise<string> {
   return userId;
 }
 
+// ─── إنشاء مستخدمين مسجلين للاختبار ─────────────────────────────────────────
 export async function CreateSignedUpUser(Times: number, TournamentId: string) {
   const users = [];
   const DBTour = await Tournament.findOne({ TournamentId });
