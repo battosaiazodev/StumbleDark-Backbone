@@ -104,10 +104,10 @@ function buildWebhookPayload(opts: {
   const regionDisplay = (tournament.Region || "North America").toString().toUpperCase();
 
   return {
-    content: "<@&1527263484058927124>",
+    content: "<@&1548232639327109200>",
     embeds: [
       {
-        title: "",
+        title: "A new tournament has been created on StumbleDark! <:Warning:1548403222983737354>",
         color: decimalColor,
         thumbnail: {
           url: tournament.TournamentImage || "https://cdn.stumblepriv.com/Emotes/Emote007_Crown.png",
