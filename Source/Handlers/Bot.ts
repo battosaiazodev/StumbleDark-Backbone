@@ -513,73 +513,85 @@ Bot.on("ready", async () => {
 
   const commands = [
 
-       // ── /create-tournament ────────────────────────────────────────────────
-    new SlashCommandBuilder()
-      .setName("create-tournament")
-      .setDescription("🏆 Create a new tournament (full options)")
-      .addStringOption((opt) =>
-        opt.setName("name").setDescription("Tournament name").setRequired(true)
-      )
-      .addIntegerOption((opt) =>
-        opt.setName("mode").setDescription("Tournament mode (partySize x rounds x slots)")
-          .setRequired(true).addChoices(...modeChoices)
-      )
-      .addStringOption((opt) =>
-        opt.setName("region").setDescription("Server region")
-          .setRequired(true).addChoices(...regionChoices)
-      )
-.addStringOption((opt) =>
-  opt.setName("map")
-    .setDescription("Tournament map")
-    .setRequired(true)
-    .setAutocomplete(true)
-)
-      .addIntegerOption((opt) =>
-        opt.setName("start").setDescription("Starts in X minutes").setRequired(true)
-      )
-      .addStringOption((opt) =>
-        opt.setName("type").setDescription("Tournament type")
-          .setRequired(false).addChoices(...tournamentTypeChoices.slice(0, 4))
-      )
-      .addStringOption((opt) =>
-        opt.setName("phase").setDescription("Phase/bracket type")
-          .setRequired(false).addChoices(...phaseTypeChoices.slice(0, 5))
-      )
-      .addIntegerOption((opt) =>
-        opt.setName("signup").setDescription("Sign-ups open in X minutes").setRequired(false)
-      )
-      .addIntegerOption((opt) =>
-        opt.setName("fee").setDescription("Entry fee (diamonds)").setRequired(false)
-      )
-      .addStringOption((opt) =>
-        opt.setName("restrictions").setDescription("Emote restriction preset")
-          .setRequired(false).addChoices(...EMOTE_PRESETS)
-      )
-      .addStringOption((opt) =>
-        opt.setName("disabledemotes").setDescription("Disabled emotes by name or ID (comma-separated)").setRequired(false)
-      )
-      .addStringOption((opt) =>
-        opt.setName("image").setDescription("Tournament image/thumbnail URL").setRequired(false)
-      )
-      .addStringOption((opt) =>
-        opt.setName("color").setDescription("Embed color in hexadecimal (e.g. #FF5500)").setRequired(false)
-      )
-      .addStringOption((opt) =>
-        opt.setName("stream").setDescription("Stream/broadcast URL").setRequired(false)
-      )
-      .addStringOption((opt) =>
-        opt.setName("invited").setDescription("Invited user IDs (comma-separated) — private tournament").setRequired(false)
-      )
-      .addStringOption((opt) =>
-        opt.setName("prizes").setDescription("Prizes by position (format: 1:1000,2:500,3:250)").setRequired(false)
-      )
-      .addStringOption((opt) =>
-        opt.setName("admins").setDescription("Additional admin IDs (comma-separated)").setRequired(false)
-      )
-      .addStringOption((opt) =>
-        opt.setName("schedule").setDescription("Schedule date/time (DD/MM/YYYY,HH:MM)").setRequired(false)
-      )
-      .toJSON(),
+ // ── /create-tournament ────────────────────────────────────────────────
+new SlashCommandBuilder()
+  .setName("create-tournament")
+  .setDescription("🏆 Create a new tournament (full options)")
+  .addStringOption((opt) =>
+    opt.setName("name").setDescription("Tournament name").setRequired(true)
+  )
+  .addIntegerOption((opt) =>
+    opt.setName("mode").setDescription("Tournament mode (partySize x rounds x slots)")
+      .setRequired(true).addChoices(...modeChoices)
+  )
+  .addStringOption((opt) =>
+    opt.setName("region").setDescription("Server region")
+      .setRequired(true).addChoices(...regionChoices)
+  )
+  .addStringOption((opt) =>
+    opt.setName("map").setDescription("Map for Round 1").setRequired(true).setAutocomplete(true)
+  )
+  .addStringOption((opt) =>
+    opt.setName("map2").setDescription("Map for Round 2 (optional)").setRequired(false).setAutocomplete(true)
+  )
+  .addStringOption((opt) =>
+    opt.setName("map3").setDescription("Map for Round 3 (optional)").setRequired(false).setAutocomplete(true)
+  )
+  .addStringOption((opt) =>
+    opt.setName("map4").setDescription("Map for Round 4 (optional)").setRequired(false).setAutocomplete(true)
+  )
+  .addStringOption((opt) =>
+    opt.setName("map5").setDescription("Map for Round 5 (optional)").setRequired(false).setAutocomplete(true)
+  )
+  .addStringOption((opt) =>
+    opt.setName("map6").setDescription("Map for Round 6 (optional)").setRequired(false).setAutocomplete(true)
+  )
+  .addIntegerOption((opt) =>
+    opt.setName("start").setDescription("Starts in X minutes").setRequired(true)
+  )
+  .addStringOption((opt) =>
+    opt.setName("type").setDescription("Tournament type")
+      .setRequired(false).addChoices(...tournamentTypeChoices.slice(0, 4))
+  )
+  .addStringOption((opt) =>
+    opt.setName("phase").setDescription("Phase/bracket type")
+      .setRequired(false).addChoices(...phaseTypeChoices.slice(0, 5))
+  )
+  .addIntegerOption((opt) =>
+    opt.setName("signup").setDescription("Sign-ups open in X minutes").setRequired(false)
+  )
+  .addIntegerOption((opt) =>
+    opt.setName("fee").setDescription("Entry fee (diamonds)").setRequired(false)
+  )
+  .addStringOption((opt) =>
+    opt.setName("restrictions").setDescription("Emote restriction preset")
+      .setRequired(false).addChoices(...EMOTE_PRESETS)
+  )
+  .addStringOption((opt) =>
+    opt.setName("disabledemotes").setDescription("Disabled emotes by name or ID (comma-separated)").setRequired(false)
+  )
+  .addStringOption((opt) =>
+    opt.setName("image").setDescription("Tournament image/thumbnail URL").setRequired(false)
+  )
+  .addStringOption((opt) =>
+    opt.setName("color").setDescription("Embed color in hexadecimal (e.g. #FF5500)").setRequired(false)
+  )
+  .addStringOption((opt) =>
+    opt.setName("stream").setDescription("Stream/broadcast URL").setRequired(false)
+  )
+  .addStringOption((opt) =>
+    opt.setName("invited").setDescription("Invited user IDs (comma-separated) — private tournament").setRequired(false)
+  )
+  .addStringOption((opt) =>
+    opt.setName("prizes").setDescription("Prizes by position (format: 1:1000,2:500,3:250)").setRequired(false)
+  )
+  .addStringOption((opt) =>
+    opt.setName("admins").setDescription("Additional admin IDs (comma-separated)").setRequired(false)
+  )
+  .addStringOption((opt) =>
+    opt.setName("schedule").setDescription("Schedule date/time (DD/MM/YYYY,HH:MM)").setRequired(false)
+  )
+  .toJSON(),
 
     // ── /list ─────────────────────────────────────────────────────────────
     new SlashCommandBuilder()
@@ -872,27 +884,277 @@ async function createTournamentCommand(interaction: ChatInputCommandInteraction)
   try {
     await interaction.deferReply({ ephemeral: true });
 
-    const name             = interaction.options.getString("name", true);
-    const modeIndex        = interaction.options.getInteger("mode", true);
-    const region           = interaction.options.getString("region", true);
-    const selectedMap      = interaction.options.getString("map", true);
-    const startMinutes     = interaction.options.getInteger("start", true);
-    const signupMinutes    = interaction.options.getInteger("signup") ?? 0;
-    const entryFee         = interaction.options.getInteger("fee") ?? 0;
-    const emotePreset      = interaction.options.getString("restrictions");
+    const name                = interaction.options.getString("name", true);
+    const modeIndex           = interaction.options.getInteger("mode", true);
+    const region              = interaction.options.getString("region", true);
+    const map1                = interaction.options.getString("map", true);
+    const map2                = interaction.options.getString("map2");
+    const map3                = interaction.options.getString("map3");
+    const map4                = interaction.options.getString("map4");
+    const map5                = interaction.options.getString("map5");
+    const map6                = interaction.options.getString("map6");
+    const startMinutes        = interaction.options.getInteger("start", true);
+    const signupMinutes       = interaction.options.getInteger("signup") ?? 0;
+    const entryFee            = interaction.options.getInteger("fee") ?? 0;
+    const emotePreset         = interaction.options.getString("restrictions");
     const disabledEmotesInput = interaction.options.getString("disabledemotes");
-    const image            = interaction.options.getString("image") || "";
-    const color            = interaction.options.getString("color") || "#2ad100";
-    const streamURL        = interaction.options.getString("stream") || "";
-    const invitedIdsInput  = interaction.options.getString("invited") || "";
-    const prizesInput      = interaction.options.getString("prizes");
-    const adminsInput      = interaction.options.getString("admins") || "";
-    const tipoStr          = interaction.options.getString("type");
-    const faseStr          = interaction.options.getString("phase");
-    const agendarStr       = interaction.options.getString("schedule");
+    const image               = interaction.options.getString("image") || "";
+    const color               = interaction.options.getString("color") || "#2ad100";
+    const streamURL           = interaction.options.getString("stream") || "";
+    const invitedIdsInput     = interaction.options.getString("invited") || "";
+    const prizesInput         = interaction.options.getString("prizes");
+    const adminsInput         = interaction.options.getString("admins") || "";
+    const tipoStr             = interaction.options.getString("type");
+    const faseStr             = interaction.options.getString("phase");
+    const agendarStr          = interaction.options.getString("schedule");
 
-    const mode             = TOURNAMENT_MODES[modeIndex];
+    const mode = TOURNAMENT_MODES[modeIndex];
     const { partySize, maxInvites, rounds } = mode;
+
+    // Emotes
+    let disabledEmotes: number[] = [];
+    if (emotePreset && emotePreset !== "all") {
+      disabledEmotes = [parseInt(emotePreset)];
+    } else if (disabledEmotesInput) {
+      disabledEmotes = parseEmotes(disabledEmotesInput);
+    }
+
+    const invitedIds  = invitedIdsInput ? invitedIdsInput.split(",").map((id) => id.trim()).filter(Boolean) : [];
+    const extraAdmins = adminsInput     ? adminsInput.split(",").map((id) => id.trim()).filter(Boolean)     : [];
+    const prizes      = prizesInput ? parsePrizes(prizesInput) : undefined;
+
+    const tournamentType = tipoStr !== null ? parseInt(tipoStr) : TournamentType.GenericTournament;
+    const phaseType      = faseStr !== null ? parseInt(faseStr) : TournamentPhaseType.SingleEliminationBracket;
+
+    // ─── Build maps array ───────────────────────────────────────────────────
+    const selectedMaps = [map1, map2, map3, map4, map5, map6].filter(Boolean) as string[];
+    const mapValues: string[] = [];
+
+    for (const mapName of selectedMaps) {
+      const val = Scenes[mapName as keyof typeof Scenes];
+      if (!val) {
+        await interaction.editReply({ content: `❌ Invalid map: **${mapName}**` });
+        return;
+      }
+      mapValues.push(val);
+    }
+
+    // Fill remaining rounds with the last selected map
+    while (mapValues.length < rounds) {
+      mapValues.push(mapValues[mapValues.length - 1]);
+    }
+
+    // Cut if more maps than rounds
+    if (mapValues.length > rounds) {
+      mapValues.length = rounds;
+    }
+
+    const colorHex   = color.startsWith("#") ? color : `#${color}`;
+    const colorValue = parseInt(colorHex.replace("#", ""), 16);
+    if (isNaN(colorValue)) {
+      await interaction.editReply({ content: `❌ Invalid color: **${color}**` });
+      return;
+    }
+
+    // ── Scheduled? ────────────────────────────────────────────────────────
+    if (agendarStr) {
+      const scheduledFor = parseScheduleDate(agendarStr);
+      if (!scheduledFor) {
+        await interaction.editReply({ content: `❌ Invalid format: \`${agendarStr}\`\nUse: **DD/MM/YYYY,HH:MM**` });
+        return;
+      }
+      const msUntil = scheduledFor.getTime() - Date.now();
+      if (msUntil <= 0) {
+        await interaction.editReply({ content: "❌ This date has already passed!" });
+        return;
+      }
+      if (msUntil > 30 * 24 * 60 * 60 * 1000) {
+        await interaction.editReply({ content: "❌ Maximum 30 days in advance." });
+        return;
+      }
+
+      const scheduleId = `sch_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+      const cfg = {
+        name, region, mapValues, startMinutes, signupMinutes, entryFee,
+        disabledEmotes, image, colorHex, streamURL, invitedIds, extraAdmins, prizes,
+        tournamentType, phaseType, partySize, maxInvites, rounds, createdBy: interaction.user.id,
+      };
+
+      const timer = setTimeout(async () => {
+        try {
+          const now2          = new Date();
+          const startTime2    = new Date(now2.getTime() + cfg.startMinutes * 60 * 1000);
+          const signupStart2  = new Date(now2.getTime() + cfg.signupMinutes * 60 * 1000);
+          const tournamentId2 = now2.getTime().toString();
+
+          await CreateTournament({
+            CurrentInvites: 0,
+            MaxInvites: cfg.maxInvites,
+            TournamentId: tournamentId2,
+            TournamentName: cfg.name,
+            TournamentImage: cfg.image,
+            TournamentColor: cfg.colorHex,
+            StartTime: startTime2,
+            SignupStart: signupStart2,
+            EntryFee: cfg.entryFee,
+            PrizepoolId: GeneratePrizepoolId().toString(),
+            PartySize: cfg.partySize,
+            Status: TournamentStatus.NotStarted,
+            TournamentType: cfg.tournamentType,
+            Phases: [{
+              PhaseType: cfg.phaseType,
+              IsPhase: false,
+              RoundCount: cfg.rounds,
+              MaxTeams: Math.floor(cfg.maxInvites / cfg.partySize),
+              Maps: cfg.mapValues
+            }],
+            Region: cfg.region,
+            RoundCount: cfg.rounds,
+            CurrentPhaseId: 0,
+            Properties: {
+              IsInvitationOnly: cfg.invitedIds.length > 0,
+              InvitedIds: cfg.invitedIds,
+              DisabledEmotes: cfg.disabledEmotes,
+              AdminIds: [cfg.createdBy, ...cfg.extraAdmins],
+              StreamURL: cfg.streamURL,
+            },
+            MinPlayersPerMatch: 1,
+            MaxPlayersPerMatch: cfg.partySize * 2,
+            Prizes: cfg.prizes,
+          });
+
+          scheduledTournaments.delete(scheduleId);
+          console.log(`✅ Scheduled tournament "${cfg.name}" created!`);
+        } catch (err) {
+          console.error(`❌ Error creating scheduled tournament ${scheduleId}:`, err);
+        }
+      }, msUntil);
+
+      scheduledTournaments.set(scheduleId, {
+        scheduleId,
+        scheduledFor,
+        createdBy: interaction.user.id,
+        config: cfg,
+        timer,
+      });
+
+      const schedTs = Math.floor(scheduledFor.getTime() / 1000);
+      await interaction.editReply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(colorValue)
+            .setTitle("📅 Tournament Scheduled!")
+            .setDescription(`**${name}** will be created at:`)
+            .addFields(
+              { name: "🕐 Creation", value: `<t:${schedTs}:F> (<t:${schedTs}:R>)`, inline: false },
+              { name: "🆔 Schedule ID", value: `\`${scheduleId}\``, inline: true },
+              { name: "🌍 Region", value: region.toUpperCase(), inline: true },
+              { name: "⚔️ Mode", value: getModeLabel(partySize), inline: true },
+              {
+                name: "🗺️ Maps",
+                value: mapValues.map((m, i) => `R${i + 1}: **${getMapFriendlyName(m)}**`).join("\n"),
+                inline: false,
+              },
+              { name: "🔢 Slots", value: `${maxInvites}`, inline: true },
+              { name: "🚀 Start", value: `${startMinutes} min after creation`, inline: true },
+            )
+            .setTimestamp(),
+        ],
+      });
+      return;
+    }
+
+    // ── Immediate creation ────────────────────────────────────────────────
+    const now          = new Date();
+    const startTime    = new Date(now.getTime() + startMinutes * 60 * 1000);
+    const signupStart  = new Date(now.getTime() + signupMinutes * 60 * 1000);
+    const tournamentId = now.getTime().toString();
+
+    await CreateTournament({
+      CurrentInvites: 0,
+      MaxInvites: maxInvites,
+      TournamentId: tournamentId,
+      TournamentName: name,
+      TournamentImage: image,
+      TournamentColor: colorHex,
+      StartTime: startTime,
+      SignupStart: signupStart,
+      EntryFee: entryFee,
+      PrizepoolId: GeneratePrizepoolId().toString(),
+      PartySize: partySize,
+      Status: TournamentStatus.NotStarted,
+      TournamentType: tournamentType,
+      Phases: [{
+        PhaseType: phaseType,
+        IsPhase: false,
+        RoundCount: rounds,
+        MaxTeams: Math.floor(maxInvites / partySize),
+        Maps: mapValues
+      }],
+      Region: region,
+      RoundCount: rounds,
+      CurrentPhaseId: 0,
+      Properties: {
+        IsInvitationOnly: invitedIds.length > 0,
+        InvitedIds: invitedIds,
+        DisabledEmotes: disabledEmotes,
+        AdminIds: [interaction.user.id, ...extraAdmins],
+        StreamURL: streamURL,
+      },
+      MinPlayersPerMatch: 1,
+      MaxPlayersPerMatch: partySize * 2,
+      Prizes: prizes,
+    });
+
+    const emotesText = getEmoteNames(disabledEmotes);
+    const prizesText = prizes
+      ? prizes.map((p) => `**${p.position}º** › ${p.amount.toLocaleString()} 💎`).join("\n")
+      : "No prizes";
+
+    const typeName = Object.keys(TournamentType).find(
+      (k) => isNaN(Number(k)) && TournamentType[k as keyof typeof TournamentType] === tournamentType
+    ) || "Generic";
+
+    const phaseName = Object.keys(TournamentPhaseType).find(
+      (k) => isNaN(Number(k)) && TournamentPhaseType[k as keyof typeof TournamentPhaseType] === phaseType
+    ) || "N/A";
+
+    const embed = new EmbedBuilder()
+      .setColor(colorValue)
+      .setTitle("✅ Tournament Created!")
+      .setDescription(`**${name}**\n\`${tournamentId}\``)
+      .addFields(
+        { name: "Region", value: region.toUpperCase(), inline: true },
+        { name: "Mode", value: getModeLabel(partySize), inline: true },
+        { name: "Type", value: typeName, inline: true },
+        { name: "Slots", value: `${maxInvites} (${rounds} rounds)`, inline: true },
+        { name: "Bracket", value: phaseName, inline: true },
+        { name: "Fee", value: `${entryFee} 💎`, inline: true },
+        {
+          name: "Maps",
+          value: mapValues.map((m, i) => `R${i + 1}: **${getMapFriendlyName(m)}**`).join("\n"),
+          inline: false,
+        },
+        { name: "Private", value: invitedIds.length > 0 ? "Yes" : "No", inline: true },
+        { name: "\u200B", value: "\u200B", inline: true },
+        { name: "Sign-ups", value: `<t:${Math.floor(signupStart.getTime() / 1000)}:R>`, inline: false },
+        { name: "Start", value: `<t:${Math.floor(startTime.getTime() / 1000)}:R>`, inline: false },
+        { name: "Emotes", value: emotesText, inline: false },
+        { name: "Prizes", value: prizesText, inline: false },
+      )
+      .setTimestamp();
+
+    if (image) embed.setThumbnail(image);
+    if (streamURL) embed.addFields({ name: "Stream", value: streamURL, inline: false });
+
+    await interaction.editReply({ embeds: [embed] });
+  } catch (error) {
+    console.error("❌ Error creating tournament:", error);
+    try {
+      await interaction.editReply({ content: "❌ Error creating tournament." });
+    } catch {}
+  }
+}
 
     // Emotes
     let disabledEmotes: number[] = [];
